@@ -1,7 +1,8 @@
 import mongoose from "mongoose";;
 
 const AssetSchema = new mongoose.Schema({
-    user: String,
+    email: String,
+    title:String,
     url:String,
     createdAt:Date
 });
