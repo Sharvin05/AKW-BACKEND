@@ -36,7 +36,5 @@ export async function signUp(req,res){
         }
     })
 
-    const jsonValue = JSON.stringify(response)
-    res.end(jsonValue)
-
+    res.json(response)
 }

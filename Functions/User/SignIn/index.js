@@ -52,8 +52,7 @@ export async function signIn(req,res){
         }
     })
 
-    const jsonValue = JSON.stringify(response)
-    res.end(jsonValue)
+    res.json(response)
 }
 
 

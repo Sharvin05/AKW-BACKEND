@@ -17,6 +17,8 @@ import {getToken, signIn} from "./Functions/User/SignIn/index.js";
 
 import {authenticateToken} from "./Plugins/auth.js";
 import {getUserImages} from "./Functions/Asset/getUserImages.js";
+import {getUserInfo} from "./Functions/User/getUserInfo.js";
+import {editUser} from "./Functions/User/editUser.js";
 
 const app = express();
 
@@ -63,8 +65,17 @@ app.post("/refresh-token", function (req, res) {
 });
 
 
+app.post("/editUser",authenticateToken, function (req, res) {
+    editUser(req,res)
+});
+
+
 app.get("/getUserImages",authenticateToken, function (req,res){
  getUserImages(req,res)
+})
+
+app.get("/getUserInfo",authenticateToken, function (req,res){
+ getUserInfo(req,res)
 })
 
 app.listen(process.env.PORT || 3011, function () {
