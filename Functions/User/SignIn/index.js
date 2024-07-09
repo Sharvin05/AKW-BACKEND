@@ -5,14 +5,16 @@ import dotenv from 'dotenv';
 import {refreshTokens} from "../../../Common/tokens.js";
 
 dotenv.config();
-export async function signIn(req,res){
-    const generateAccessToken = (email) => {
-        return jwt.sign({ email: email }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '8h' });
-    };
 
-    const generateRefreshToken = (email) => {
-        return jwt.sign({ email:email }, process.env.REFRESH_TOKEN_SECRET);
-    };
+const generateAccessToken = (email) => {
+    return jwt.sign({ email: email }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '8h' });
+};
+
+const generateRefreshToken = (email) => {
+    return jwt.sign({ email:email }, process.env.REFRESH_TOKEN_SECRET);
+};
+export async function signIn(req,res){
+
     let response={
         code:400,
         msg:'Try again after sometimes'
@@ -52,4 +54,18 @@ export async function signIn(req,res){
 
     const jsonValue = JSON.stringify(response)
     res.end(jsonValue)
+}
+
+
+export async function getToken(req,res){
+        const refreshToken = req.body.token;
+        if (refreshToken == null) return res.sendStatus(401);
+        if (!refreshTokens.includes(refreshToken)) return res.sendStatus(403);
+
+        jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
+            if (err) return res.sendStatus(403);
+            const userPayload = { name: user.name };
+            const accessToken = generateAccessToken(userPayload);
+            res.json({ accessToken });
+        });
 }

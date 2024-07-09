@@ -12,7 +12,7 @@ import router from "./Functions/Asset/upload.js"
 
 
 import {signUp} from "./Functions/User/SignUp/index.js";
-import {signIn} from "./Functions/User/SignIn/index.js";
+import {getToken, signIn} from "./Functions/User/SignIn/index.js";
 
 
 import {authenticateToken} from "./Plugins/auth.js";
@@ -56,6 +56,10 @@ app.post("/signIn", function (req, res) {
 
 app.post("/signUp", function (req, res) {
     signUp(req,res)
+});
+
+app.post("/refresh-token", function (req, res) {
+    getToken(req,res)
 });
 
 
