@@ -19,6 +19,7 @@ import {authenticateToken} from "./Plugins/auth.js";
 import {getUserImages} from "./Functions/Asset/getUserImages.js";
 import {getUserInfo} from "./Functions/User/getUserInfo.js";
 import {editUser} from "./Functions/User/editUser.js";
+import {deleteEntry} from "./Functions/Asset/handleAsset.js";
 
 const app = express();
 
@@ -68,6 +69,12 @@ app.post("/refresh-token", function (req, res) {
 app.post("/editUser",authenticateToken, function (req, res) {
     editUser(req,res)
 });
+
+app.post("/deleteEntry",authenticateToken, function (req, res) {
+    deleteEntry(req,res)
+});
+
+
 
 
 app.get("/getUserImages",authenticateToken, function (req,res){

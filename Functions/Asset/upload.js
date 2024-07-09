@@ -5,6 +5,7 @@ import {Asset} from "../../Models/asset.js";
 import dotenv from "dotenv";
 import express from "express";
 import S3 from "aws-sdk/clients/s3.js"
+import {User} from "../../Models/user.js";
 
 const router = express.Router();
 
@@ -61,8 +62,49 @@ router.post('/',authenticateToken, upload.single('image'),async  (req, res) => {
             msg:'Please try again Later'
         }
     }
-    const jsonvalue = JSON.stringify(response)
-    res.end(jsonvalue)
+    res.json(response)
+});
+
+router.post('/update',authenticateToken, upload.single('image'),async  (req, res) => {
+    // console.log('File incoming:', req);
+    console.log('File uploaded:', req.body);
+
+    const imageUrl = req.file?.location;
+    // const newImage = new Asset({
+    //     url:imageUrl,
+    //     email:req.headers?.email,
+    //     title:req.body?.title ? req.body?.title : '',
+    //     createdAt:new Date()
+    // });
+    const assetId = req.body?.id
+    let response = {
+        code: 500,
+        msg: 'Try again!'
+    };
+    try {
+        const updateResponse = await Asset.findByIdAndUpdate(
+            assetId,
+            {
+                url:imageUrl,
+                title:req.body?.title
+            },
+            { new: true } // This option returns the updated document
+        );
+        console.log("edited", updateResponse);
+
+        response = {
+            code: 200,
+            msg: 'User Edited'
+        };
+    } catch (error) {
+        console.error("Error editing user:", error);
+        response = {
+            code: 500,
+            msg: 'Internal Server Error'
+        };
+    }
+
+    res.json(response)
 });
 
 export default router
